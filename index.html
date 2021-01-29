@@ -17,39 +17,40 @@
          <div class="cart">
             <div class="col-md-12 col-lg-10 mx-auto">
                <div class="cart-item">
-                  <div class="row">
+                  <div class="row" id="PHONE">
                      <div class="col-md-7 center-item">
-                        <img src="images/product-1.png" alt="">
+                        <img src="product-1.png" alt="">
                         <h5>iPhone 11 128GB Black</h5>
                      </div>
 
-                     <div class="col-md-5 center-item">
+                     <div class="col-md-5 center-item" id="phone">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button class="btn btn-default"><i class="fas fa-minus" id="minus"></i></button>
+                           <input type="text" class="form-control text-center" id="phoneAmount"
+                              onkeypress='checkEnterClickPHONE(event)' value="1">
+                           <button class="btn btn-default"><i class="fas fa-plus" id="plus"></i></button>
                         </div>
-                        <h5>$1219</h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$<span id="PhoneValue">1219</span></h5>
+                        <img src="remove.png" alt="" class="remove-item" id="removep">
                      </div>
                   </div>
                </div>
 
                <div class="cart-item">
-                  <div class="row">
-                     <div class="col-md-7 center-item mx-auto">
-                        <img src="images/product-2.png" alt="">
+                  <div class="row" id="CARD">
+                     <div class="col-md-7 center-item mx-auto" id="case">
+                        <img src="product-2.png" alt="">
                         <h5>iPhone 11 Silicone Case - Black</h5>
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button class="btn btn-default"><i class="fas fa-minus" id="minusc"></i></button>
+                           <input type="text" class="form-control text-center" id="caseAmount"  onkeypress='checkEnterClickCASE(event)' value="1">
+                           <button class="btn btn-default"><i class="fas fa-plus" id="plusc"></i></button>
 
                         </div>
-                        <h5>$59</h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$<span id="CaseValue">59</span></h5>
+                        <img src="remove.png" alt="" class="remove-item" id="removec">
                      </div>
                   </div>
                </div>
@@ -64,19 +65,173 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$1,278</h5>
-                        <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5>$<span id="subtotal">1278</span></h5>
+                        <h5>$<span id="tax">0</span></h5>
+                        <h5>$<span id="totall">1278</span></h5>
                      </div>
                   </div>
                </div>
                <div class="col-md-12 pt-4 pb-4">
-                  <button type="button" class="btn btn-success check-out">Check Out</button>
+                  <button type="button" class="btn btn-success check-out" onclick="checkOut()">Check Out</button>
                </div>
             </div>
          </div>
       </div>
    </section>
+
+
+
+   <script>
+       var PAY = 1278;
+      document.getElementById('plus').addEventListener('click', function () {
+         var previous = document.getElementById('phoneAmount').value;
+         previous = parseInt(previous);
+         // console.log(typeof(previous));
+         var next = plus(previous);
+         document.getElementById('phoneAmount').value = next;
+
+         //  next = document.getElementById('phoneAmount').innerText;
+         // var Value= document.getElementById('PhoneValue').innerText;
+         // Value=parseInt(Value);
+         var tot = total(next, 1219);
+         document.getElementById('PhoneValue').innerText = tot;
+         subtotal();
+         //console.log(Value);
+
+
+      })
+      document.getElementById('minus').addEventListener('click', function () {
+         var previous = document.getElementById('phoneAmount').value;
+         previous = parseInt(previous);
+
+         if (previous > 0) {
+            var next = minus(previous);
+            document.getElementById('phoneAmount').value = next;
+         }
+         else {
+            var next = 0;
+         }
+         var tot = total(next, 1219);
+         document.getElementById('PhoneValue').innerText = tot;
+         subtotal();
+
+
+
+      })
+      document.getElementById('plusc').addEventListener('click', function () {
+         var previous = document.getElementById('caseAmount').value;
+         previous = parseInt(previous);
+
+         var next = plus(previous);
+         document.getElementById('caseAmount').value = next;
+
+         var tot = total(next, 59);
+         document.getElementById('CaseValue').innerText = tot;
+         subtotal();
+
+
+
+      })
+      document.getElementById('minusc').addEventListener('click', function () {
+         var previous = document.getElementById('caseAmount').value;
+         previous = parseInt(previous);
+
+         if (previous > 0) {
+            var next = minus(previous);
+            document.getElementById('caseAmount').value = next;
+         }
+         else {
+            var next = 0;
+         }
+         var tot = total(next, 59);
+         document.getElementById('CaseValue').innerText = tot;
+         subtotal();
+
+
+
+      })
+      
+      function subtotal() {
+         var takaofphone = document.getElementById('PhoneValue').innerText;
+         var takaofcase = document.getElementById('CaseValue').innerText;
+         var subtotalprice = parseFloat(takaofcase) + parseFloat(takaofphone)
+
+         document.getElementById('subtotal').innerText = subtotalprice;
+         var tax = ((subtotalprice) * 0.04).toFixed(2);
+         document.getElementById('tax').innerText = tax;
+         var FinalTotal = parseFloat(subtotalprice) + parseFloat(tax);
+
+         document.getElementById('totall').innerText = FinalTotal;
+         PAY=FinalTotal;
+
+
+      }
+      document.getElementById('removep').addEventListener('click', function () {
+
+         document.getElementById('PHONE').style.display = "none";
+         document.getElementById('PhoneValue').innerText = "0";
+         subtotal();
+      })
+      document.getElementById('removec').addEventListener('click', function () {
+
+         document.getElementById('CARD').style.display = "none";
+         document.getElementById('CaseValue').innerText = "0";
+         subtotal();
+      })
+
+   
+
+
+
+
+
+
+
+     
+      function checkEnterClickPHONE(e) {
+         if (e.keyCode == 13) {
+            var VALUE = document.getElementById('phoneAmount').value;
+            document.getElementById('PhoneValue').innerText = VALUE * 1219;
+            subtotal();
+         }
+      }
+      function checkEnterClickCASE(e) {
+         if (e.keyCode == 13) {
+            var VALUE = document.getElementById('caseAmount').value;
+            document.getElementById('CaseValue').innerText = VALUE * 59;
+            subtotal();
+         }
+      }
+
+
+      function plus(previous) {
+         next = previous + 1;
+         return next;
+      }
+      function minus(previous) {
+         next = previous - 1;
+         return next;
+      }
+      function total(amount, Value) {
+         var tot = amount * Value;
+         return tot;
+      }
+      function remove(id, valueOfElement) {
+         document.getElementById(id).style.display = "none";
+         valueOfElement = 0;
+      }
+      document.addEventListener()
+
+    
+       function checkOut() {
+          
+       alert("please pay $"+PAY+" for purchase this");} 
+        
+     
+
+
+
+   </script>
 </body>
 
 </html>
